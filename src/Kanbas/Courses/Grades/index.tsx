@@ -76,7 +76,7 @@ export default function Grades() {
                         <td className="text-danger">Christina Allen</td>
                         <td>100%</td>
                         <td><input className="form-control"
-                                   id="input1" value="100%"/></td>
+                                   id="input1" value="90%"/></td>
                         <td>100%</td>
                         <td>100%</td>
                     </tr>
