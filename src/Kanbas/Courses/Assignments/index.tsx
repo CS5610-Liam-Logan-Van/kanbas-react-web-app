@@ -52,7 +52,7 @@ export default function Assignments() {
                 </div>
 
             </div>
-            <ul id="wd-assignment-list" className="list-group list-group-mind rounded-0">
+            <ul id="wd-assignment-list" className="list-group list-group-mine rounded-0">
                 {Object.values(assignments)
                     .filter((assignment: any) => assignment.course === cid)
                     .map((assignment: any) => (
