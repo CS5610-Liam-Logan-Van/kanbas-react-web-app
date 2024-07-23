@@ -4,8 +4,15 @@ import {FaPlus} from "react-icons/fa";
 import {IoEllipsisVertical} from "react-icons/io5";
 import GreenCheckmark from "../Modules/GreenCheckmark";
 import {BsFillJournalBookmarkFill} from "react-icons/bs";
+import ModuleControlButtons from "../Modules/ModuleControlButtons";
+import LessonControlButtons from "../Modules/LessonControlButtons";
+import {useParams} from "react-router";
+import * as db from "../../Database";
 
 export default function Assignments() {
+    const {cid} = useParams();
+    const assignments = db.assignments;
+
     return (
         <div id="wd-assignments">
             <div className="row align-items-center mb-5">
@@ -16,9 +23,10 @@ export default function Assignments() {
                     </div>
                 </div>
                 <div className="col">
-                    <button id="wd-add-assignment" className="float-end btn btn-lg btn-danger"><FaPlus/>   Assignment
+                    <button id="wd-add-assignment" className="float-end btn btn-lg btn-danger"><FaPlus/> Assignment
                     </button>
-                    <button id="wd-add-assignment-group" className="float-end btn btn-lg btn-secondary me-1"><FaPlus/>   Group
+                    <button id="wd-add-assignment-group" className="float-end btn btn-lg btn-secondary me-1">
+                        <FaPlus/> Group
                     </button>
                 </div>
             </div>
@@ -44,85 +52,38 @@ export default function Assignments() {
                 </div>
 
             </div>
-            <ul id="wd-assignment-list" className="list-group list-group-mine rounded-0">
-                <li className="wd-assignment-list-item list-group-item p-3 ps-1">
-                    <div className="row align-items-center">
-                        <div className="col-auto">
-                            <BsGripVertical className="me-2 fs-3"/>
-                        </div>
-                        <div className="col-auto">
-                            <BsFillJournalBookmarkFill className="me-2 fs-3 text-success"/>
-                        </div>
-                        <div className="col">
-                            <a className="wd-assignment-link"
-                               href="#/Kanbas/Courses/1234/Assignments/123">
-                                A1 - ENV + HTML
-                            </a>
-                            <br/>
-                            <span className="text-danger">Multiple Modules</span> | <b>Not available until</b> May 13 at
-                            12:00am | <b>Due</b> May 20 at 11:59pm |
-                            100pts
-                        </div>
-                        <div className="col-auto">
-                            <GreenCheckmark/>
-                        </div>
-                        <div className="col-auto">
-                            <IoEllipsisVertical className="fs-4"/>
-                        </div>
-                    </div>
-                </li>
-                <li className="wd-assignment-list-item list-group-item p-3 ps-1">
-                    <div className="row align-items-center">
-                        <div className="col-auto">
-                            <BsGripVertical className="me-2 fs-3"/>
-                        </div>
-                        <div className="col-auto">
-                            <BsFillJournalBookmarkFill className="me-2 fs-3 text-success"/>
-                        </div>
-                        <div className="col">
-                            <a className="wd-assignment-link"
-                               href="#/Kanbas/Courses/1234/Assignments/123">
-                                A1 - CSS + BOOTSTRAP
-                            </a>
-                            <br/>
-                            <span className="text-danger">Multiple Modules</span> | <b>Not available until</b> May 6 at
-                            12:00am | <b>Due</b> May 13 at
-                            11:59pm |
-                            100pts
-                        </div>
-                        <div className="col-auto">
-                            <GreenCheckmark/>
-                        </div>
-                        <div className="col-auto">
-                            <IoEllipsisVertical className="fs-4"/>
-                        </div>
-                    </div>
-                </li>
-                <li className="wd-assignment-list-item list-group-item p-3 ps-1">
-                    <div className="row align-items-center">
-                        <div className="col-auto">
-                            <BsGripVertical className="me-2 fs-3"/>
-                        </div>
-                        <div className="col-auto">
-                            <BsFillJournalBookmarkFill className="me-2 fs-3 text-success"/>
-                        </div>
-                        <div className="col">
-                            <a className="wd-assignment-link"
-                               href="#/Kanbas/Courses/1234/Assignments/123">
-                                A1 - JAVASCRIPT + REACT
-                            </a>
-                            <br/>
-                            <span className="text-danger">Multiple Modules</span> | <b>Not available until</b> May 20 at 12:00am | <b>Due</b> May 27 at 11:59pm |
-                    100pts
-                        </div>
-                        <div className="col-auto">
-                            <GreenCheckmark/>
-                        </div>
-                        <div className="col-auto">
-                            <IoEllipsisVertical className="fs-4"/>
-                        </div>
-                    </div>
-                </li>
+            <ul id="wd-assignment-list" className="list-group list-group-mind rounded-0">
+                {Object.values(assignments)
+                    .filter((assignment: any) => assignment.course === cid)
+                    .map((assignment: any) => (
+                        <li className="wd-assignment-list-item list-group-item p-3 ps-1">
+                            <div className="row align-items-center">
+                                <div className="col-auto">
+                                    <BsGripVertical className="me-2 fs-3"/>
+                                </div>
+                                <div className="col-auto">
+                                    <BsFillJournalBookmarkFill className="me-2 fs-3 text-success"/>
+                                </div>
+                                <div className="col">
+                                    <a className="wd-assignment-link"
+                                       href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}>
+                                        {assignment.title}
+                                    </a>
+                                    <br/>
+                                    <span className="text-danger">Multiple Modules</span> | <b>Not available
+                                    until</b> May 13 at
+                                    12:00am | <b>Due</b> May 20 at 11:59pm |
+                                    100pts
+                                </div>
+                                <div className="col-auto">
+                                    <GreenCheckmark/>
+                                </div>
+                                <div className="col-auto">
+                                    <IoEllipsisVertical className="fs-4"/>
+                                </div>
+                            </div>
+                        </li>
+                    ))}
             </ul>
         </div>
     );

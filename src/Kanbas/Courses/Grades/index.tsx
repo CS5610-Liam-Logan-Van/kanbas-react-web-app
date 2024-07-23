@@ -2,12 +2,19 @@ import {FaFileImport, FaFileExport} from "react-icons/fa";
 import {FaGear, FaMagnifyingGlass} from "react-icons/fa6";
 import {MdArrowDropDown} from "react-icons/md";
 import {CiFilter} from "react-icons/ci";
-
+import {useParams} from "react-router";
+import * as db from "../../Database";
 
 import GreenCheckmark from "../Modules/GreenCheckmark";
 import {MdDoNotDisturbAlt} from "react-icons/md";
 
 export default function Grades() {
+    const {cid} = useParams();
+    const users = db.users;
+    const grades = db.grades;
+    const enrollments = db.enrollments;
+    const assignments = db.assignments;
+
     return (
         <div>
             <div className="row">
@@ -54,46 +61,33 @@ export default function Grades() {
             </div>
             <div className="table-responsive">
                 <table className="table table-striped table-bordered mt-3">
-
-
                     <tbody>
                     <tr>
                         <td><b>Student Name</b></td>
-                        <td>A1 Setup Out of 100</td>
-                        <td>A2 HTML</td>
-                        <td>A3 CSS</td>
-                        <td>A4 Bootstrap</td>
+                        {Object.values(assignments)
+                            .filter((assignment: any) => assignment.course === cid)
+                            .map((assignment: any) => (
+                                <td>{assignment._id}</td>
+                            ))}
+                    </tr>
+                    {Object.values(enrollments)
+                        .filter((enrollment: any) => enrollment.course === cid)
+                        .map((enrollment: any) => (
+                            <tr>
+                                {Object.values(users)
+                                    .filter((user: any) => user._id === enrollment.user)
+                                    .map((user: any) => (
+                                        <td className="text-danger">{user.firstName} {user.lastName}</td>
+                                    ))}
+                                {Object.values(grades)
+                                    .filter((grade: any) => grade.student === enrollment.user)
+                                    .map((grade: any) => (
+                                        <td>{grade.grade}</td>
+                                    ))}
 
-                    </tr>
-                    <tr>
-                        <td className="text-danger">Jane Adams</td>
-                        <td>100%</td>
-                        <td>96.67%</td>
-                        <td>92.18%</td>
-                        <td>66.22%</td>
-                    </tr>
-                    <tr>
-                        <td className="text-danger">Christina Allen</td>
-                        <td>100%</td>
-                        <td><input className="form-control"
-                                   id="input1" value="90%"/></td>
-                        <td>100%</td>
-                        <td>100%</td>
-                    </tr>
-                    <tr>
-                        <td className="text-danger">Joe Shmoe</td>
-                        <td>100%</td>
-                        <td>100%</td>
-                        <td>100%</td>
-                        <td>100%</td>
-                    </tr>
-                    <tr>
-                        <td className="text-danger">Shmoseph Joseph</td>
-                        <td>100%</td>
-                        <td>100%</td>
-                        <td>100%</td>
-                        <td>100%</td>
-                    </tr>
+                            </tr>
+                        ))}
+
 
                     </tbody>
                 </table>
