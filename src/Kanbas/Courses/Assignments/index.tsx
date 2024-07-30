@@ -1,17 +1,26 @@
 import {FaMagnifyingGlass} from "react-icons/fa6";
+import {FaTrash} from "react-icons/fa";
 import {BsGripVertical} from "react-icons/bs";
 import {FaPlus} from "react-icons/fa";
 import {IoEllipsisVertical} from "react-icons/io5";
 import GreenCheckmark from "../Modules/GreenCheckmark";
 import {BsFillJournalBookmarkFill} from "react-icons/bs";
+import {Link} from 'react-router-dom';
 import ModuleControlButtons from "../Modules/ModuleControlButtons";
 import LessonControlButtons from "../Modules/LessonControlButtons";
 import {useParams} from "react-router";
 import * as db from "../../Database";
+import {useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import DeleteModal from "./DeleteModal"
+import {deleteAssignment} from "./reducer";
+import {addModule} from "../Modules/reducer";
 
 export default function Assignments() {
+
     const {cid} = useParams();
-    const assignments = db.assignments;
+    const {assignments} = useSelector((state: any) => state.assignmentReducer);
+    const dispatch = useDispatch();
 
     return (
         <div id="wd-assignments">
@@ -23,8 +32,11 @@ export default function Assignments() {
                     </div>
                 </div>
                 <div className="col">
-                    <button id="wd-add-assignment" className="float-end btn btn-lg btn-danger"><FaPlus/> Assignment
-                    </button>
+                    <Link to={`/Kanbas/Courses/${cid}/Assignments/NewAssignment`}>
+                        <button id="wd-add-assignment" className="float-end btn btn-lg btn-danger"><FaPlus/>
+                            Assignment
+                        </button>
+                    </Link>
                     <button id="wd-add-assignment-group" className="float-end btn btn-lg btn-secondary me-1">
                         <FaPlus/> Group
                     </button>
@@ -53,7 +65,7 @@ export default function Assignments() {
 
             </div>
             <ul id="wd-assignment-list" className="list-group list-group-mine rounded-0">
-                {Object.values(assignments)
+                {assignments
                     .filter((assignment: any) => assignment.course === cid)
                     .map((assignment: any) => (
                         <li className="wd-assignment-list-item list-group-item p-3 ps-1">
@@ -71,9 +83,16 @@ export default function Assignments() {
                                     </a>
                                     <br/>
                                     <span className="text-danger">Multiple Modules</span> | <b>Not available
-                                    until</b> May 13 at
-                                    12:00am | <b>Due</b> May 20 at 11:59pm |
-                                    100pts
+                                    until</b> {assignment.available_from} at
+                                    12:00am | <b>Due</b> {assignment.available_until} at 11:59pm
+                                    | {assignment.points} points
+                                </div>
+                                <div className="col-auto">
+                                    <button id="wd-add-module-btn" className="btn btn-danger me-1"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#wd-delete-assignment-dialog">
+                                        Delete
+                                    </button>
                                 </div>
                                 <div className="col-auto">
                                     <GreenCheckmark/>
@@ -82,9 +101,15 @@ export default function Assignments() {
                                     <IoEllipsisVertical className="fs-4"/>
                                 </div>
                             </div>
+                            <DeleteModal deleteAssignment={() => {
+                                dispatch(deleteAssignment(assignment._id));
+
+                            }}/>
                         </li>
+
                     ))}
             </ul>
+
         </div>
     );
 }
