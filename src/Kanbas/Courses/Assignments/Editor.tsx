@@ -1,7 +1,12 @@
 import {Link, useNavigate, useParams} from "react-router-dom";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {addAssignment, updateAssignment} from "./reducer";
+import {
+    addAssignment,
+    updateAssignment,
+    setAssignments,
+} from "./reducer";
+import * as client from "./client";
 
 export default function AssignmentEditor() {
     const {cid, asid} = useParams();
@@ -23,8 +28,44 @@ export default function AssignmentEditor() {
             description: course_assignment?.description || "New Assignment Description",
             due: course_assignment?.due || ""
         }
-    )
-
+    );
+    const fetchAssignment = async () => {
+        const fetchedAssignments = await client.findAssignmentsForCourse(
+            cid as string
+        );
+        dispatch(setAssignments(fetchedAssignments));
+        const specificAssignment = fetchedAssignments.find(
+            (assignment: any) => assignment._id === asid
+        );
+        if (specificAssignment) {
+            setAssignment(specificAssignment);
+        } else {
+            setAssignment({
+                _id: "",
+                title: "New Assignment",
+                course: cid,
+                points: 0,
+                available_from: "",
+                available_until: "",
+                description: "New Assignment Description",
+                due: ""
+            });
+        }
+    };
+    useEffect(() => {
+        fetchAssignment();
+    }, [cid, asid, dispatch]);
+    const createAssignment = async (assignment: any) => {
+        const newAssignment = await client.createAssignment(
+            cid as string,
+            assignment
+        );
+        dispatch(addAssignment(newAssignment));
+    };
+    const saveAssignment = async (assignment: any) => {
+        const status = await client.updateAssignment(assignment);
+        dispatch(updateAssignment(assignment));
+    };
     return (
         <div>
 
@@ -168,9 +209,9 @@ export default function AssignmentEditor() {
                 <hr/>
                 <button className="btn btn-lg btn-danger me-1 float-end" role="button" onClick={() => {
                     if (course_assignment) {
-                        dispatch(updateAssignment(assignment));
+                        saveAssignment(assignment);
                     } else {
-                        dispatch(addAssignment(assignment));
+                        createAssignment(assignment);
                     }
                     navigate(`/Kanbas/Courses/${cid}/Assignments`)
                 }}

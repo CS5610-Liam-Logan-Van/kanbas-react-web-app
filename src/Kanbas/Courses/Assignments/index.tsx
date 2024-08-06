@@ -9,19 +9,38 @@ import {Link} from 'react-router-dom';
 import ModuleControlButtons from "../Modules/ModuleControlButtons";
 import LessonControlButtons from "../Modules/LessonControlButtons";
 import {useParams} from "react-router";
-import * as db from "../../Database";
-import {useState} from "react";
+import * as client from "./client";
+import {useState, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import DeleteModal from "./DeleteModal"
-import {deleteAssignment} from "./reducer";
-import {addModule} from "../Modules/reducer";
+import {addAssignment, setAssignments, updateAssignment, deleteAssignment} from "./reducer";
 
 export default function Assignments() {
 
     const {cid} = useParams();
     const {assignments} = useSelector((state: any) => state.assignmentReducer);
     const dispatch = useDispatch();
-
+    const fetchAssignments = async () => {
+        const assignments = await client.findAssignmentsForCourse(cid as string);
+        dispatch(setAssignments(assignments));
+    };
+    useEffect(() => {
+        fetchAssignments();
+    }, []);
+    const removeAssignment = async (asid: string) => {
+        await client.deleteAssignment(asid);
+        dispatch(deleteAssignment(asid));
+    };
+    const [selectedAssignment, setSelectedAssignment] = useState<any>(null);
+    const deleteButton = (assignment: any) => {
+        setSelectedAssignment(assignment);
+    };
+    const modalDelete = () => {
+        if (selectedAssignment) {
+            removeAssignment(selectedAssignment._id);
+            setSelectedAssignment(null);
+        }
+    };
     return (
         <div id="wd-assignments">
             <div className="row align-items-center mb-5">
@@ -90,7 +109,7 @@ export default function Assignments() {
                                 <div className="col-auto">
                                     <button id="wd-add-module-btn" className="btn btn-danger me-1"
                                             data-bs-toggle="modal"
-                                            data-bs-target="#wd-delete-assignment-dialog">
+                                            data-bs-target="#wd-delete-assignment-dialog" onClick={() => deleteButton(assignment)}>
                                         Delete
                                     </button>
                                 </div>
@@ -102,8 +121,7 @@ export default function Assignments() {
                                 </div>
                             </div>
                             <DeleteModal deleteAssignment={() => {
-                                dispatch(deleteAssignment(assignment._id));
-
+                                modalDelete();
                             }}/>
                         </li>
 
