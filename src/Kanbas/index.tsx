@@ -2,11 +2,13 @@ import Dashboard from "./Dashboard";
 import KanbasNavigation from "./Navigation";
 import {Routes, Route, Navigate} from "react-router";
 import Courses from "./Courses";
+import Account from "./Account";
 import * as client from "./Courses/client";
 import {useEffect, useState} from "react";
 import "./styles.css";
 import store from "./store";
 import {Provider} from "react-redux";
+import ProtectedRoute from "./ProtectedRoute";
 
 export default function Kanbas() {
     const [courses, setCourses] = useState<any[]>([]);
@@ -53,15 +55,16 @@ export default function Kanbas() {
                 <KanbasNavigation/>
                 <div className="wd-main-content-offset p-3">
                     <Routes>
+                        <Route path="/Account/*" element={<Account />}/>
                         <Route path="/" element={<Navigate to="Dashboard"/>}/>
-                        <Route path="Dashboard" element={<Dashboard
+                        <Route path="Dashboard" element={<ProtectedRoute><Dashboard
                             courses={courses}
                             course={course}
                             setCourse={setCourse}
                             addNewCourse={addNewCourse}
                             deleteCourse={deleteCourse}
-                            updateCourse={updateCourse}/>}/>
-                        <Route path="Courses/:cid/*" element={<Courses courses={courses}/>}/>
+                            updateCourse={updateCourse}/></ProtectedRoute>}/>
+                        <Route path="Courses/:cid/*" element={<ProtectedRoute><Courses courses={courses}/></ProtectedRoute>}/>
                     </Routes>
                 </div>
             </div>
