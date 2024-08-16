@@ -2,20 +2,20 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   quizzes: [] as {
-    _id: String;
-    title: String;
-    quiz_type: String;
-    points: Number;
-    assignment_group: String;
-    shuffle_answers: String; //Boolean? But can be String for Yes/No
-    time_limit: Number;
-    multiple_attempts: String; //Boolean? But can be String for Yes/No
+    _id: string;
+    title: string;
+    quiz_type: string;
+    points: number;
+    assignment_group: string;
+    shuffle_answers: string; //Boolean? But can be String for Yes/No
+    time_limit: number;
+    multiple_attempts: string; //Boolean? But can be String for Yes/No
     // how_many_attempts:
-    show_correct_answers: String;
-    access_code: String;
-    one_question_at_a_time: String;
-    webcam_required: String; //Boolean? But can be String for Yes/No
-    lock_questions_after_answering: String; //Boolean? But can be String for Yes/No
+    show_correct_answers: string;
+    access_code: string;
+    one_question_at_a_time: string;
+    webcam_required: string; //Boolean? But can be String for Yes/No
+    lock_questions_after_answering: string; //Boolean? But can be String for Yes/No
     due_date: Date;
     available_date: Date;
     until_date: Date;
