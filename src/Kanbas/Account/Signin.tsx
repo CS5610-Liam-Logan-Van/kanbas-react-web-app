@@ -13,7 +13,7 @@ export default function Signin() {
         try {
             const currentUser = await client.signin(credentials);
             dispatch(setCurrentUser(currentUser));
-            navigate("/Kanbas/Account/Profile");
+            navigate("/Kanbas/Dashboard");
         } catch (err: any) {
             setError(err.response.data.message);
         }
