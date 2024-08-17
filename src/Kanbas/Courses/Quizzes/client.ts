@@ -43,6 +43,17 @@ export const updateQuiz = async (quiz: any) => {
   return response.data;
 };
 
+// do we have something like this?
+export const fetchQuizQuestions = async (quizId: string) => {
+  try {
+    const response = await axiosWithCredentials.get(`${QUIZZES_API}/quiz/${quizId}/questions`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching quiz questions:", error);
+    return mockQuizData.questions;
+  }
+};
+
 // calculate total points
 export const calculateTotalPoints = (quiz: any) => { // unused, someone steal it. i saw vans comments and made it
   return quiz.questions.reduce(
