@@ -1,4 +1,5 @@
 import axios from "axios";
+import {QUIZZES_API} from "../Courses/Quizzes/client";
 const axiosWithCredentials = axios.create({ withCredentials: true });
 
 export const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
@@ -19,4 +20,12 @@ export const signup = async (user: any) => {
 export const signout = async () => {
     const response = await axiosWithCredentials.post(`${USERS_API}/signout`);
     return response.data;
+};
+
+export const updateUser = async (user: any) => {
+  const response = await axiosWithCredentials.put(
+      `${USERS_API}/${user._id}`,
+      user
+  );
+  return response.data;
 };
