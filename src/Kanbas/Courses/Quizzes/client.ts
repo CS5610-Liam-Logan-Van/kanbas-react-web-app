@@ -35,10 +35,27 @@ export const deleteQuiz = async (quizId: any) => {
   return response.data;
 };
 
+// export const updateQuiz = async (quiz: any, p0: { status: string; }) => {
+//   const response = await axiosWithCredentials.put(
+//       `${QUIZZES_API}/${quiz._id}`,
+//       quiz
+//   );
+//   return response.data;
+// };
 export const updateQuiz = async (quiz: any) => {
   const response = await axiosWithCredentials.put(
-      `${QUIZZES_API}/${quiz._id}`,
-      quiz
+    `${QUIZZES_API}/${quiz._id}`,
+    quiz
+  );
+  return response.data;
+};
+
+
+// Adding this to toggle published/unpublished -Van
+export const togglePublish = async (quizId: string, isPublished: boolean) => {
+  const response = await axiosWithCredentials.patch(
+    `${QUIZZES_API}/${quizId}`,
+    { published: !isPublished }
   );
   return response.data;
 };
