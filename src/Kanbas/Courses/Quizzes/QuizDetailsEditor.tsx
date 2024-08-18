@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import * as client from './client';
 import RichTextEditor, { ContentEditableEvent } from "react-simple-wysiwyg";
+import QuizQuestionsEditor from './QuizQuestionsEditors/QuizQuestionsEditor';
 
 interface Quiz {
     _id?: string;
@@ -177,10 +178,7 @@ export default function QuizDetailsEditor() {
                 </form>
             )}
             {activeTab === 'questions' && (
-                <div>
-                    <h3>Questions</h3>
-                    {/* questions needed */}
-                </div>
+                <QuizQuestionsEditor quizId={quizId} />
             )}
         </div>
     );

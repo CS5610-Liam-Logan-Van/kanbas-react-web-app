@@ -16,8 +16,11 @@ interface Question {
     correct_answers?: string[];
 }
 
-export default function QuizQuestionsEditor() {
-    const { quizId } = useParams<{ quizId: string }>();
+interface QuizQuestionsEditorProps {
+    quizId: string | undefined;
+}
+
+export default function QuizQuestionsEditor({ quizId }: QuizQuestionsEditorProps) {
     const [questions, setQuestions] = useState<Question[]>([]);
     const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
 
@@ -66,21 +69,23 @@ export default function QuizQuestionsEditor() {
         <div>
             <h1>Questions Editor</h1>
             <div>
-                <button onClick={() => addQuestion('Multiple Choice')}>Add Multiple Choice</button>
-                <button onClick={() => addQuestion('True/False')}>Add True/False</button>
-                <button onClick={() => addQuestion('Fill in the Blank')}>Add Fill in Blank</button>
+                <button onClick={() => addQuestion('Multiple Choice')} className="btn btn-primary me-2">+ New Multiple Choice Question</button>
+                <button onClick={() => addQuestion('True/False')} className="btn btn-primary me-2">+ New True/False Question</button>
+                <button onClick={() => addQuestion('Fill in the Blank')} className="btn btn-primary">+ New Fill in the Blank Question</button>
             </div>
-            <ul>
+            <ul className="mt-4 list-group">
                 {questions.map(q => (
-                    <li key={q.id}>
-                        {q.title || 'Untitled Question'} ({q.type})
-                        <button onClick={() => setCurrentQuestion(q)}>Edit</button>
-                        <button onClick={() => deleteQuestion(q.id)}>Delete</button>
+                    <li key={q.id} className="list-group-item d-flex justify-content-between align-items-center">
+                        <span>{q.title || 'Untitled Question'} ({q.type})</span>
+                        <div>
+                            <button onClick={() => setCurrentQuestion(q)} className="btn btn-secondary me-2">Edit</button>
+                            <button onClick={() => deleteQuestion(q.id)} className="btn btn-danger">Delete</button>
+                        </div>
                     </li>
                 ))}
             </ul>
             {currentQuestion && (
-                <div>
+                <div className="mt-4">
                     {currentQuestion.type === 'Multiple Choice' && (
                         <MultipleChoiceEditor
                             question={currentQuestion as any}
@@ -104,6 +109,10 @@ export default function QuizQuestionsEditor() {
                     )}
                 </div>
             )}
+            <div className="mt-4 d-flex justify-content-end">
+                <button className="btn btn-secondary me-2">Cancel</button>
+                <button className="btn btn-danger">Save Quiz</button>
+            </div>
         </div>
     );
 }
