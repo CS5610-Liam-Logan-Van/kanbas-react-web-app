@@ -2,21 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import * as client from './client';
 import RichTextEditor, { ContentEditableEvent } from "react-simple-wysiwyg";
-import MultipleChoiceEditor from './QuizQuestionsEditors/MultipleChoiceEditor';
-import TrueFalseEditor from './QuizQuestionsEditors/TFEditor';
-import FillInBlankEditor from './QuizQuestionsEditors/FillInBlankEditor';
-
-
-interface Question {
-    id: string;
-    type: 'Multiple Choice' | 'True/False' | 'Fill in the Blank';
-    title: string;
-    points: number;
-    question: string;
-    choices?: { id: string; option: string }[];
-    correct_choice?: string | boolean;
-    correct_answers?: string[];
-}
+import QuizQuestionsEditor from './QuizQuestionsEditors/QuizQuestionsEditor';
 
 interface Quiz {
     _id?: string;
@@ -37,7 +23,6 @@ interface Quiz {
     due_date: string;
     available_date: string;
     until_date: string;
-    questions: Question[];
 }
 
 export default function QuizDetailsEditor() {
@@ -61,10 +46,8 @@ export default function QuizDetailsEditor() {
         due_date: new Date().toISOString().split('T')[0],
         available_date: new Date().toISOString().split('T')[0],
         until_date: new Date().toISOString().split('T')[0],
-        questions: [],
     });
     const [activeTab, setActiveTab] = useState('details');
-    const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
 
     useEffect(() => {
         const fetchQuiz = async () => {
@@ -92,7 +75,8 @@ export default function QuizDetailsEditor() {
         setQuiz(prev => ({ ...prev, description: e.target.value }));
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         try {
             if (quizId === 'new') {
                 await client.createQuiz(quiz);
@@ -102,39 +86,6 @@ export default function QuizDetailsEditor() {
             navigate(`/Kanbas/Courses/${cid}/Quizzes`);
         } catch (err) {
             console.error('Failed to save quiz:', err);
-        }
-    };
-
-    const addQuestion = (type: Question['type']) => {
-        const newQuestion: Question = {
-            id: Date.now().toString(),
-            type,
-            title: '',
-            points: 1,
-            question: '',
-            choices: type === 'Multiple Choice' ? [] : undefined,
-            correct_choice: type === 'True/False' ? false : undefined,
-            correct_answers: type === 'Fill in the Blank' ? [] : undefined,
-        };
-        setQuiz(prev => ({ ...prev, questions: [...prev.questions, newQuestion] }));
-        setCurrentQuestion(newQuestion);
-    };
-
-    const updateQuestion = (updatedQuestion: Question) => {
-        setQuiz(prev => ({
-            ...prev,
-            questions: prev.questions.map(q => q.id === updatedQuestion.id ? updatedQuestion : q)
-        }));
-        setCurrentQuestion(null);
-    };
-
-    const deleteQuestion = (id: string) => {
-        setQuiz(prev => ({
-            ...prev,
-            questions: prev.questions.filter(q => q.id !== id)
-        }));
-        if (currentQuestion?.id === id) {
-            setCurrentQuestion(null);
         }
     };
 
@@ -227,50 +178,7 @@ export default function QuizDetailsEditor() {
                 </form>
             )}
             {activeTab === 'questions' && (
-                <div>
-                    <h3>Questions</h3>
-                    <button onClick={() => addQuestion('Multiple Choice')} className="btn btn-primary mb-3">+ New Question</button>
-                    {quiz.questions.map(q => (
-                        <div key={q.id} className="card mb-3">
-                            <div className="card-body">
-                                <h5 className="card-title">{q.title || 'Untitled Question'}</h5>
-                                <p>Type: {q.type}</p>
-                                <p>Points: {q.points}</p>
-                                <button onClick={() => setCurrentQuestion(q)} className="btn btn-secondary me-2">Edit</button>
-                                <button onClick={() => deleteQuestion(q.id)} className="btn btn-danger">Delete</button>
-                            </div>
-                        </div>
-                    ))}
-                    {currentQuestion && (
-                        <div>
-                            {currentQuestion.type === 'Multiple Choice' && (
-                                <MultipleChoiceEditor
-                                    question={currentQuestion as any}
-                                    onSave={updateQuestion}
-                                    onCancel={() => setCurrentQuestion(null)}
-                                />
-                            )}
-                            {currentQuestion.type === 'True/False' && (
-                                <TrueFalseEditor
-                                    question={currentQuestion as any}
-                                    onSave={updateQuestion}
-                                    onCancel={() => setCurrentQuestion(null)}
-                                />
-                            )}
-                            {currentQuestion.type === 'Fill in the Blank' && (
-                                <FillInBlankEditor
-                                    question={currentQuestion as any}
-                                    onSave={updateQuestion}
-                                    onCancel={() => setCurrentQuestion(null)}
-                                />
-                            )}
-                        </div>
-                    )}
-                    <div className="mt-3">
-                        <button onClick={() => navigate(`/Kanbas/Courses/${cid}/Quizzes`)} className="btn btn-secondary me-2">Cancel</button>
-                        <button onClick={handleSubmit} className="btn btn-primary">Save Quiz</button>
-                    </div>
-                </div>
+                <QuizQuestionsEditor quizId={quizId} />
             )}
         </div>
     );

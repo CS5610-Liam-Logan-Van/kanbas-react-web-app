@@ -1,28 +1,21 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-interface Question {
+interface FillInBlankQuestion {
     id: string;
-    type: 'Multiple Choice' | 'True/False' | 'Fill in the Blank';
+    type: 'Fill in the Blank';
     title: string;
     points: number;
     question: string;
-    choices?: { id: string; option: string }[];
-    correct_choice?: string | boolean;
-    correct_answers?: string[];
-}
-
-interface FillInBlankQuestion extends Question {
-    type: 'Fill in the Blank';
     correct_answers: string[];
 }
 
 interface Props {
     question: FillInBlankQuestion;
-    onSave: (question: Question) => void;
+    onSave: (question: FillInBlankQuestion) => void;
     onCancel: () => void;
 }
 
-export default function FillInBlankEditor({question, onSave, onCancel}: Props) {
+export default function FillInBlankEditor({ question, onSave, onCancel }: Props) {
     const [editedQuestion, setEditedQuestion] = useState<FillInBlankQuestion>(question);
     const [error, setError] = useState<string | null>(null);
 
@@ -55,7 +48,7 @@ export default function FillInBlankEditor({question, onSave, onCancel}: Props) {
     return (
         <div>
             <h2>Edit Fill in the Blank Question</h2>
-            {error && <div style={{color: 'red'}}>{error}</div>}
+            {error && <div style={{ color: 'red' }}>{error}</div>}
             <label htmlFor="title">Question Title:</label>
             <input
                 id="title"

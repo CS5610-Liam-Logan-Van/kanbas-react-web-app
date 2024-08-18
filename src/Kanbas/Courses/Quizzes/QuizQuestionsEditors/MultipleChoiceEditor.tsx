@@ -1,25 +1,18 @@
 import React, { useState } from 'react';
 
-interface Question {
+interface MultipleChoiceQuestion {
     id: string;
-    type: 'Multiple Choice' | 'True/False' | 'Fill in the Blank';
+    type: 'Multiple Choice';
     title: string;
     points: number;
     question: string;
-    choices?: { id: string; option: string }[];
-    correct_choice?: string | boolean;
-    correct_answers?: string[];
-}
-
-interface MultipleChoiceQuestion extends Question {
-    type: 'Multiple Choice';
     choices: { id: string; option: string }[];
     correct_choice: string;
 }
 
 interface Props {
     question: MultipleChoiceQuestion;
-    onSave: (question: Question) => void;
+    onSave: (question: MultipleChoiceQuestion) => void;
     onCancel: () => void;
 }
 
