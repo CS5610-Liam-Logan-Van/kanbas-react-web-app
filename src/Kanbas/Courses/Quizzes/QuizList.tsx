@@ -32,20 +32,31 @@ export default function QuizList() {
     dispatch(removeQuiz(quizId));
   };
 
-  // const handleTogglePublish = async (quizId: string, currentStatus: string) => {
-  //   const newStatus = currentStatus === "published" ? "draft" : "published";
-  //   await client.updateQuiz(quizId, { status: newStatus });
-  //   const quizzes = await findAllQuizzes(cid as string);
-  //   dispatch(setQuizzes(quizzes));
-  // };
-  const handleTogglePublish = async (quizId: string, currentStatus: string) => {
-    const newStatus = currentStatus === "published" ? "draft" : "published";
-    await client.updateQuiz({ _id: quizId, status: newStatus }); // pass only the quiz object
+  const handleTogglePublish = async (
+    quizId: string,
+    currentStatus: boolean
+  ) => {
+    const newStatus = !currentStatus;
+    await client.updateQuiz({ _id: quizId, published: newStatus }); //update new status
     const quizzes = await findAllQuizzes(cid as string);
     dispatch(setQuizzes(quizzes));
   };
 
-const renderQuizItem = (quiz: any) => (
+  const getAvailability = (quiz: any) => {
+    const current_date = new Date();
+    const available_date = new Date(quiz.available_date);
+    const until_date = new Date(quiz.until_date);
+
+    if (current_date < available_date) {
+      return `Not available until ${available_date.toLocaleDateString()}`;
+    } else if (current_date > until_date) {
+      return "Closed";
+    } else {
+      return "Available";
+    }
+  };
+
+const renderQuizzes = (quiz: any) => (
   <li className="list-group-item p-0 border-0" key={quiz._id}>
     <div
       className="wd-quizzes form-control list-group-item p-3 ps-1 d-flex align-items-center"
@@ -53,14 +64,16 @@ const renderQuizItem = (quiz: any) => (
         borderLeft: "5px solid #198754",
       }}
     >
+      <RxRocket className="text-success me-2 fs-4" />
       <div>
         <Link to={`QuizDetails/${quiz._id}`} className="text-dark fw-bold fs-5">
-          <RxRocket className="me-2 green" />
+          {/* <RxRocket className="text-success me-2 fs-4" /> */}
           <strong>{quiz.title}</strong>
         </Link>
         <p className="fs-6 mb-0">
-          <b>{quiz.status === "published" ? "Available" : "Closed"}</b> |
-          <b> Due </b> | {quiz.points} pts | {quiz.questions.length} questions
+          <b>{getAvailability(quiz)}</b> |<b> Due </b>
+          {new Date(quiz.due_date).toLocaleDateString()} | {quiz.points} pts |
+          {quiz.questions.length} questions
         </p>
       </div>
       <div className="ms-auto">
@@ -69,9 +82,9 @@ const renderQuizItem = (quiz: any) => (
             id="wd-quiz-toggle-btn"
             type="button"
             className="btn btn-link p-0"
-            onClick={() => handleTogglePublish(quiz._id, quiz.status)}
+            onClick={() => handleTogglePublish(quiz._id, quiz.published)}
           >
-            {quiz.status === "published" ? (
+            {quiz.published ? (
               <MdCheckBox className="text-success me-2 fs-4" />
             ) : (
               <CiNoWaitingSign className="text-danger me-2 fs-4" />
@@ -107,9 +120,9 @@ const renderQuizItem = (quiz: any) => (
               <li>
                 <button
                   className="dropdown-item d-flex align-items-center"
-                  onClick={() => handleTogglePublish(quiz._id, quiz.status)}
+                  onClick={() => handleTogglePublish(quiz._id, quiz.published)}
                 >
-                  {quiz.status === "published" ? (
+                  {quiz.published ? (
                     <>
                       Unpublish
                       <CiNoWaitingSign className="text-danger ms-2" />
@@ -137,7 +150,7 @@ const renderQuizItem = (quiz: any) => (
         <strong className="fs-5">Assignment Quizzes</strong>
         <BsThreeDotsVertical className="fs-4 mb-1 mx-2" />
       </div>
-      {quizzes.map((quiz: any) => renderQuizItem(quiz))}
+      {quizzes.map((quiz: any) => renderQuizzes(quiz))}
     </ul>
   );
 }
