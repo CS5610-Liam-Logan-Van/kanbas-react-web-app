@@ -1,6 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
 import * as client from './client';
+import FillInBlankEditor from "./QuizQuestionsEditors/FillInBlankEditor";
+import MultipleChoiceEditor from "./QuizQuestionsEditors/MultipleChoiceEditor";
+import QuizQuestionsEditor from "./QuizQuestionsEditors/QuizQuestionsEditor";
+import TrueFalseEditor from "./QuizQuestionsEditors/TFEditor";
 
 interface Quiz {
     _id?: string;
@@ -117,7 +121,7 @@ export default function QuizDetailsEditor() {
                     <button type="button" className="btn btn-secondary float-end"
                             onClick={() => navigate(`/Kanbas/Courses/${cid}/Quizzes`)}>Cancel
                     </button>
-                    {/* wtf else do we need */}
+
                 </form>
         </div>
 );

@@ -2,7 +2,7 @@ import * as client from "./client";
 import {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
-import {setCurrentUser} from "./reducer";
+import {setCurrentUser, updateUser} from "./reducer";
 
 export default function Profile() {
     const dispatch = useDispatch();
@@ -42,13 +42,16 @@ export default function Profile() {
                            onChange={(e) => setProfile({...profile, dob: e.target.value})} type="date"/>
                     <input className="wd-email form-control mb-2" value={profile.email}
                            onChange={(e) => setProfile({...profile, email: e.target.value})}/>
-                    <select className="wd-role form-control mb-2"
+                    <select className="wd-role form-control mb-2" value={profile.role}
                             onChange={(e) => setProfile({...profile, role: e.target.value})}>
                         <option value="USER">User</option>
                         <option value="ADMIN">Admin</option>
                         <option value="FACULTY">Faculty</option>
                         <option value="STUDENT">Student</option>
                     </select>
+                    <button onClick={updateUser} className="wd-saveprofile-btn btn btn-primary w-100 mb-2">
+                        Save Changes
+                    </button>
                     <button onClick={signout} className="wd-signout-btn btn btn-danger w-100">
                         Sign out
                     </button>
