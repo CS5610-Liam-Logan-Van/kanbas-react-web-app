@@ -109,10 +109,6 @@ export default function QuizQuestionsEditor({ quizId }: QuizQuestionsEditorProps
                     )}
                 </div>
             )}
-            <div className="mt-4 d-flex justify-content-end">
-                <button className="btn btn-secondary me-2">Cancel</button>
-                <button className="btn btn-danger">Save Quiz</button>
-            </div>
         </div>
     );
 }
