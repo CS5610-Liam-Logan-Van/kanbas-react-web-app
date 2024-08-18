@@ -28,7 +28,7 @@ export default function QuizDetails() {
     const { quizId } = useParams<{ quizId: string }>();
     const [quiz, setQuiz] = useState<Quiz | null>(null);
     const [error, setError] = useState<string | null>(null);
-
+    const {cid} = useParams<{ cid: string }>();
     useEffect(() => {
         const fetchQuiz = async () => {
             if (quizId) {
@@ -67,12 +67,13 @@ export default function QuizDetails() {
                 <li>Available From: {new Date(quiz.available_date).toLocaleString()}</li>
                 <li>Available Until: {new Date(quiz.until_date).toLocaleString()}</li>
             </ul>
-            <Link to={`/Kanbas/Courses/Quizzes/QuizDetailsEditor/${quiz._id}`}>
-                <button className="btn btn-primary">Edit</button>
-            </Link>
-            <Link to={`/Kanbas/Courses/Quizzes/QuizPreview/${quiz._id}`}>
+            <Link to={`/Kanbas/Courses/${cid}/Quizzes/QuizPreview/${quiz._id}`}>
                 <button className="btn btn-secondary">Preview</button>
             </Link>
+            <Link to={`/Kanbas/Courses/${cid}/Quizzes/QuizDetailsEditor/${quiz._id}`}>
+                <button className="btn btn-primary ms-2">Edit</button>
+            </Link>
+
         </div>
     );
 }
