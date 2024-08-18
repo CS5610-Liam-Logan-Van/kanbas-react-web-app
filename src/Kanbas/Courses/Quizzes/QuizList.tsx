@@ -124,13 +124,13 @@ const renderQuizzes = (quiz: any) => (
                 >
                   {quiz.published ? (
                     <>
+                      <CiNoWaitingSign className="text-danger me-2" />
                       Unpublish
-                      <CiNoWaitingSign className="text-danger ms-2" />
                     </>
                   ) : (
                     <>
+                      <MdCheckBox className="text-success me-2" />
                       Publish
-                      <MdCheckBox className="text-success ms-2" />
                     </>
                   )}
                 </button>
