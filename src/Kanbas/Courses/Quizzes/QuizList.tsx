@@ -67,7 +67,6 @@ const renderQuizzes = (quiz: any) => (
       <RxRocket className="text-success me-2 fs-4" />
       <div>
         <Link to={`QuizDetails/${quiz._id}`} className="text-dark fw-bold fs-5">
-          {/* <RxRocket className="text-success me-2 fs-4" /> */}
           <strong>{quiz.title}</strong>
         </Link>
         <p className="fs-6 mb-0">
