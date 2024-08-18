@@ -10,7 +10,6 @@ const initialState = {
     shuffle_answers: string; //Boolean? But can be String for Yes/No
     time_limit: number;
     multiple_attempts: string; //Boolean? But can be String for Yes/No
-    // how_many_attempts:
     show_correct_answers: string;
     access_code: string;
     one_question_at_a_time: string;
@@ -19,6 +18,7 @@ const initialState = {
     due_date: Date;
     available_date: Date;
     until_date: Date;
+    published: boolean;
   }[],
   quiz: {
     title: "New Quiz",
@@ -28,7 +28,6 @@ const initialState = {
     shuffle_answers: "Yes",
     time_limit: 20,
     multiple_attempts: "No",
-    // how_many_attempts: 1, needs to be worked on for if multiple attempts == true/Yes
     show_correct_answers: "Immediately",
     access_code: "",
     one_question_at_a_time: "Yes",
@@ -62,10 +61,10 @@ const quizzesSlice = createSlice({
       );
     },
 
-    updateQuiz: (state, action) => {
+    editQuiz: (state, action) => {
       state.quizzes = state.quizzes.map((quiz) => {
         if (quiz._id === action.payload._id) {
-          return action.payload;
+          return { ...quiz, ...action.payload };
         } else {
           return quiz;
         }
@@ -74,6 +73,6 @@ const quizzesSlice = createSlice({
   },
 });
 
-export const { addQuiz, removeQuiz, updateQuiz, setQuiz, setQuizzes } =
+export const { addQuiz, removeQuiz, editQuiz, setQuiz, setQuizzes } =
   quizzesSlice.actions;
 export default quizzesSlice.reducer;

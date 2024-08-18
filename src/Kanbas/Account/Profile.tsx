@@ -2,7 +2,7 @@ import * as client from "./client";
 import {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
-import {setCurrentUser, updateUser} from "./reducer";
+import {setCurrentUser} from "./reducer";
 
 export default function Profile() {
     const dispatch = useDispatch();
@@ -49,7 +49,7 @@ export default function Profile() {
                         <option value="FACULTY">Faculty</option>
                         <option value="STUDENT">Student</option>
                     </select>
-                    <button onClick={updateUser} className="wd-saveprofile-btn btn btn-primary w-100 mb-2">
+                    <button className="wd-saveprofile-btn btn btn-primary w-100 mb-2">
                         Save Changes
                     </button>
                     <button onClick={signout} className="wd-signout-btn btn btn-danger w-100">
