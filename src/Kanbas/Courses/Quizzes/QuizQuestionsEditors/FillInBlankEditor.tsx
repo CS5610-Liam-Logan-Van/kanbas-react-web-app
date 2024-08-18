@@ -48,20 +48,22 @@ export default function FillInBlankEditor({ question, onSave, onCancel }: Props)
     return (
         <div>
             <h2>Edit Fill in the Blank Question</h2>
-            {error && <div style={{ color: 'red' }}>{error}</div>}
+            {error && <div style={{color: 'red'}}>{error}</div>}
             <label htmlFor="title">Question Title:</label>
             <input
                 id="title"
+                className="form-control mt-2 mb-3"
                 value={editedQuestion.title}
-                onChange={e => setEditedQuestion({ ...editedQuestion, title: e.target.value })}
+                onChange={e => setEditedQuestion({...editedQuestion, title: e.target.value})}
                 placeholder="Question Title"
                 required
             />
             <label htmlFor="question">Question Text:</label>
             <textarea
                 id="question"
+                className="form-control mt-2 mb-3"
                 value={editedQuestion.question}
-                onChange={e => setEditedQuestion({ ...editedQuestion, question: e.target.value })}
+                onChange={e => setEditedQuestion({...editedQuestion, question: e.target.value})}
                 placeholder="Question Text (Use ___ for blank)"
                 required
             />
@@ -70,8 +72,9 @@ export default function FillInBlankEditor({ question, onSave, onCancel }: Props)
             <input
                 id="points"
                 type="number"
+                className="form-control mt-2 mb-3"
                 value={editedQuestion.points}
-                onChange={e => setEditedQuestion({ ...editedQuestion, points: Number(e.target.value) })}
+                onChange={e => setEditedQuestion({...editedQuestion, points: Number(e.target.value)})}
                 placeholder="Points"
                 required
             />
@@ -79,16 +82,19 @@ export default function FillInBlankEditor({ question, onSave, onCancel }: Props)
             {editedQuestion.correct_answers.map((answer, index) => (
                 <div key={index}>
                     <input
+                        className="form-control"
                         value={answer}
                         onChange={e => updateAnswer(index, e.target.value)}
                         placeholder="Correct Answer"
                     />
-                    <button onClick={() => deleteAnswer(index)}>Delete</button>
+                    <button className="btn btn-danger mt-2" onClick={() => deleteAnswer(index)}>Delete</button>
+                    <hr/>
                 </div>
             ))}
-            <button onClick={addAnswer}>Add Answer</button>
-            <button onClick={handleSave}>Save Question</button>
-            <button onClick={onCancel}>Cancel</button>
+            <button className="btn btn-secondary" onClick={onCancel}>Cancel</button>
+            <button className="btn btn-info mx-2" onClick={addAnswer}>Add Answer</button>
+            <button className="btn btn-primary" onClick={handleSave}>Save Question</button>
+
         </div>
     );
 }
