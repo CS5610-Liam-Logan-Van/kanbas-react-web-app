@@ -56,7 +56,7 @@ const quizzesSlice = createSlice({
       state.quizzes = [action.payload, ...state.quizzes];
     },
 
-    deleteQuiz: (state, action) => {
+    removeQuiz: (state, action) => {
       state.quizzes = state.quizzes.filter(
         (quiz) => quiz._id !== action.payload
       );
@@ -74,6 +74,6 @@ const quizzesSlice = createSlice({
   },
 });
 
-export const { addQuiz, deleteQuiz, updateQuiz, setQuiz, setQuizzes } =
+export const { addQuiz, removeQuiz, updateQuiz, setQuiz, setQuizzes } =
   quizzesSlice.actions;
 export default quizzesSlice.reducer;

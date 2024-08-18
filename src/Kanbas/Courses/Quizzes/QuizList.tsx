@@ -8,25 +8,29 @@ import { FaTrash } from "react-icons/fa";
 import { IoEllipsisVertical } from "react-icons/io5";
 import GreenCheckmark from "../Modules/GreenCheckmark";
 import { FaPencil } from "react-icons/fa6";
-import * as client from "../Quizzes/client"
-import {useDispatch, useSelector} from "react-redux";
-import {findAllQuizzes} from "./client";
-import {setQuizzes} from "./reducer";
+import * as client from "../Quizzes/client";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteQuiz, findAllQuizzes } from "./client";
+import { removeQuiz, setQuizzes } from "./reducer";
 
 export default function QuizList() {
   const { cid } = useParams();
-  const {quizzes} = useSelector((state: any) => state.quizzesReducer);
+  const { quizzes } = useSelector((state: any) => state.quizzesReducer);
   const [selectedQuizzes, setSelectedQuizzes] = useState([]);
 
-  // Haven't been able to test this stuff yet bc of rendering issues
   const dispatch = useDispatch();
-    const fetchQuizzes = async () => {
-        const quizzes = await findAllQuizzes(cid as string);
-        dispatch(setQuizzes(quizzes));
-    };
-    useEffect(() => {
-        fetchQuizzes();
-    }, []);
+  const fetchQuizzes = async () => {
+    const quizzes = await findAllQuizzes(cid as string);
+    dispatch(setQuizzes(quizzes));
+  };
+  useEffect(() => {
+    fetchQuizzes();
+  }, []);
+
+  const handleDelete = async (quizId: string) => {
+    await client.deleteQuiz(quizId);
+    dispatch(removeQuiz(quizId));
+  };
 
   return (
     <ul className="list-group rounded-0 border-gray">
@@ -66,7 +70,6 @@ export default function QuizList() {
                     type="button"
                     data-bs-toggle="dropdown"
                   >
-                    {/* NEED TO GET TOGGLE BUTTON WORKING */}
                     <IoEllipsisVertical className="fs-4" />
                   </button>
                   <ul className="dropdown-menu">
@@ -75,12 +78,12 @@ export default function QuizList() {
                         to={`QuizDetailsEditor/${quiz._id}`}
                         className="dropdown-item"
                       >
-                        <FaPencil />
+                        <FaPencil className="text-primary me-2 mb-1" />
                         Edit
                       </Link>
                     </li>
-                    <li className="dropdown-item">
-                      <FaTrash />
+                    <li className="dropdown-item" onClick={() => handleDelete(quiz._id)}>
+                      <FaTrash className="text-danger me-2 mb-1" />
                       Delete
                     </li>
                   </ul>
