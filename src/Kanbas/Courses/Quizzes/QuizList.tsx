@@ -9,27 +9,34 @@ import { IoEllipsisVertical } from "react-icons/io5";
 import GreenCheckmark from "../Modules/GreenCheckmark";
 import { FaPencil } from "react-icons/fa6";
 import * as client from "../Quizzes/client"
+import {useDispatch, useSelector} from "react-redux";
+import {findAllQuizzes} from "./client";
+import {setQuizzes} from "./reducer";
 
 export default function QuizList() {
-  const { courseId } = useParams();
-  const [quizzes, setQuizzes] = useState([]);
+  const { cid } = useParams();
+  const {quizzes} = useSelector((state: any) => state.quizzesReducer);
+  const [selectedQuizzes, setSelectedQuizzes] = useState([]);
 
   // Haven't been able to test this stuff yet bc of rendering issues
-  useEffect(() => {
-    client.findAllQuizzes(courseId).then((quizzes) => {
-        setQuizzes(quizzes)
-    })
-  })
+  const dispatch = useDispatch();
+    const fetchQuizzes = async () => {
+        const quizzes = await findAllQuizzes(cid as string);
+        dispatch(setQuizzes(quizzes));
+    };
+    useEffect(() => {
+        fetchQuizzes();
+    }, []);
 
   return (
     <ul className="list-group rounded-0 border-gray">
       <div className="wd-quiz-list-title p-3 ps-2 bg-secondary">
         <GoTriangleDown className="me-2 fs-5" />
         <strong className="fs-5">Assignment Quizzes</strong>
-        <BsThreeDotsVertical className="fs-4" />
+        <BsThreeDotsVertical className="fs-4 mb-1 mx-2" />
       </div>
       {quizzes.map((quiz: any) => (
-        <li key={quiz._id} className="list-group-item p-0 border-0">
+        <li className="list-group-item p-0 border-0">
           <div
             className="wd-quizzes form-control list-group-item p-3 ps-1 d-flex align-items-center"
             style={{
