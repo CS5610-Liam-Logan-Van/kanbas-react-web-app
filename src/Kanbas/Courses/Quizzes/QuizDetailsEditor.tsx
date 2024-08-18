@@ -25,6 +25,7 @@ interface Quiz {
 
 export default function QuizDetailsEditor() {
     const {quizId} = useParams<{ quizId: string }>();
+    const {cid} = useParams<{ cid: string }>();
     const navigate = useNavigate();
     const [quiz, setQuiz] = useState<Quiz>({
         title: '',
@@ -77,28 +78,47 @@ export default function QuizDetailsEditor() {
             } else {
                 await client.updateQuiz(quiz);
             }
-            navigate('/Kanbas/Courses/Quizzes');
+            navigate(`/Kanbas/Courses/${cid}/Quizzes`);
         } catch (err) {
             setError('Failed to save quiz'); // idc if it does
         }
     };
 
     if (error) return <div className="alert alert-danger">{error}</div>;
-
+    let tab = 'questions';
     return (
-        <form onSubmit={handleSubmit}>
-            <h1>{quizId === 'new' ? 'Create New Quiz' : 'Edit Quiz'}</h1>
-            <div className="mb-3">
-                <label htmlFor="title" className="form-label">Title</label>
-                <input type="text" className="form-control" id="title" name="title" value={quiz.title} onChange={handleChange} required/>
-            </div>
-            <div className="mb-3">
-                <label htmlFor="description" className="form-label">Description</label>
-                <textarea className="form-control" id="description" name="description" value={quiz.description} onChange={handleChange}></textarea>
-            </div>
-            <button type="submit" className="btn btn-primary">Save Quiz</button>
-            <button type="button" className="btn btn-secondary" onClick={() => navigate('/Kanbas/Courses/Quizzes')}>Cancel</button>
-            {/* wtf else do we need */}
-        </form>
-    );
+        <div>
+            <ul className="nav nav-pills">
+                <li className="nav-item">
+                    <button onClick={() => tab = 'details'} className={`nav-link ${tab === 'details' ? "active" : ""}`}>
+                        Details
+                    </button>
+                </li>
+                <li className="nav-item">
+                    <button onClick={() => tab = 'questions'}
+                       className={`nav-link ${tab === 'questions' ? "active" : ""}`}>
+                        Questions
+                    </button>
+                </li>
+            </ul>
+                <form onSubmit={handleSubmit}>
+                    <h1>{quizId === 'new' ? 'Create New Quiz' : 'Edit Quiz'}</h1>
+                    <div className="mb-3">
+                        <label htmlFor="title" className="form-label">Title</label>
+                        <input type="text" className="form-control" id="title" name="title" value={quiz.title}
+                               onChange={handleChange} required/>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="description" className="form-label">Description</label>
+                        <textarea className="form-control" id="description" name="description" value={quiz.description}
+                                  onChange={handleChange}></textarea>
+                    </div>
+                    <button type="submit" className="btn btn-primary ms-2 float-end">Save Quiz</button>
+                    <button type="button" className="btn btn-secondary float-end"
+                            onClick={() => navigate(`/Kanbas/Courses/${cid}/Quizzes`)}>Cancel
+                    </button>
+                    {/* wtf else do we need */}
+                </form>
+        </div>
+);
 }
