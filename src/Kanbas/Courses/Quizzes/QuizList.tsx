@@ -71,7 +71,7 @@ const renderQuizzes = (quiz: any) => (
         </Link>
         <p className="fs-6 mb-0">
           <b>{getAvailability(quiz)}</b> |<b> Due </b>
-          {new Date(quiz.due_date).toLocaleDateString()} | {quiz.points} pts |
+          {new Date(quiz.due_date).toLocaleDateString()} | {quiz.points} pts |{" "}
           {quiz.questions.length} questions
         </p>
       </div>
@@ -94,6 +94,7 @@ const renderQuizzes = (quiz: any) => (
               id="wd-quiz-toggle-btn"
               type="button"
               data-bs-toggle="dropdown"
+              className="btn"
             >
               <IoEllipsisVertical className="fs-4" />
             </button>
