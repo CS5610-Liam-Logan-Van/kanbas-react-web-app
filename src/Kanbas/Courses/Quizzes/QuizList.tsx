@@ -37,7 +37,7 @@ export default function QuizList() {
     currentStatus: boolean
   ) => {
     const newStatus = !currentStatus;
-    await client.updateQuiz({ _id: quizId, published: newStatus }); //update new status
+    await client.updateQuiz({ _id: quizId, published: newStatus }); //update the new status
     const quizzes = await findAllQuizzes(cid as string);
     dispatch(setQuizzes(quizzes));
   };
