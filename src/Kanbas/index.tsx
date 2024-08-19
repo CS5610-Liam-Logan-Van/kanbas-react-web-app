@@ -17,14 +17,9 @@ export default function Kanbas() {
         const courses = await client.fetchAllCourses();
         setCourses(courses);
     };
-    const fetchUserProfile = async () => {
-        const profile = await client.profile();
-        setUser(profile);
-    }
 
     useEffect(() => {
         fetchCourses();
-        fetchUserProfile()
     }, []);
 
     const [course, setCourse] = useState<any>({

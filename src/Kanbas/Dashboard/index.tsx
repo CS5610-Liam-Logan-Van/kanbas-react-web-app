@@ -15,7 +15,6 @@ export default function Dashboard(
         updateCourse: () => void;
     }
 ) {
-
     return (
         <div id="wd-dashboard">
             <h1 id="wd-dashboard-title">Dashboard</h1>
