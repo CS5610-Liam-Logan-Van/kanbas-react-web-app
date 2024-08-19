@@ -5,60 +5,16 @@ export default function TOC() {
   return (
       <ul className="nav nav-pills">
           <li className="nav-item">
-              <a id="wd-a" href="#/Labs" className="nav-link">
-                  Labs
+              <a id="wd-k" href="https://github.com/CS5610-Liam-Logan-Van/kanbas-react-web-app" className="nav-link">
+                  React Repo
               </a>
           </li>
           <li className="nav-item">
-              <a id="wd-a1" href="#/Labs/Lab1"
-                 className={`nav-link ${pathname.includes("Lab1") ? "active" : ""}`}>
-                  Lab 1
+              <a id="wd-k" href="https://github.com/CS5610-Liam-Logan-Van/kanbas-node-server-app" className="nav-link">
+                  Node Repo
               </a>
           </li>
-          <li className="nav-item">
-              <a id="wd-a2" href="#/Labs/Lab2"
-                 className={`nav-link ${pathname.includes("Lab2") ? "active" : ""}`}>
-                  Lab 2
-              </a>
-          </li>
-          <li className="nav-item">
-              <a id="wd-a3" href="#/Labs/Lab3"
-                 className={`nav-link ${pathname.includes("Lab3") ? "active" : ""}`}>
-                  Lab 3
-              </a>
-          </li>
-          <li className="nav-item">
-              <a id="wd-a4" href="#/Labs/Lab4"
-                 className={`nav-link ${pathname.includes("Lab4") ? "active" : ""}`}>
-                  Lab 4
-              </a>
-          </li>
-          <li className="nav-item">
-              <a id="wd-a5" href="#/Labs/Lab5"
-                 className={`nav-link ${pathname.includes("Lab5") ? "active" : ""}`}>
-                  Lab 5
-              </a>
-          </li>
-          <li className="nav-item">
-              <a id="wd-k" href="#/Kanbas" className="nav-link">
-                  Kanbas
-              </a>
-          </li>
-          <li className="nav-item">
-              <a id="wd-k" href="https://github.com/loganjwillans" className="nav-link">
-                  My GitHub
-              </a>
-          </li>
-          <li className="nav-item">
-              <a id="wd-k" href="https://github.com/loganjwillans/kanbas-node-server-app" className="nav-link">
-                  Kanbas Node Server App Repo
-              </a>
-          </li>
-          <li className="nav-item">
-              <a id="wd-k" href="https://kanbas-node-server-app-9mgq.onrender.com/" className="nav-link">
-                  Render Root
-              </a>
-          </li>
+
       </ul>
   );
 }
