@@ -52,11 +52,12 @@ export const togglePublish = async (quizId: string, isPublished: boolean) => {
 
 export const fetchQuizQuestions = async (quizId: string) => {
   try {
-    const response = await axiosWithCredentials.get(`${QUIZZES_API}/quiz/${quizId}/questions`);
+    const response = await axiosWithCredentials.get(`${quizId}/questions`);
     return response.data;
-  } catch (error) {
+  }
+  catch (error) {
     console.error("Error fetching quiz questions:", error);
-    return mockQuizData.questions;
+    return [];
   }
 };
 
