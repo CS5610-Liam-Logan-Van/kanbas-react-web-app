@@ -70,10 +70,10 @@ export default function QuizQuestionsEditor({ quizId, questions, setQuestions }:
         setCurrentQuestion(null);
     };
 
-    const deleteQuestion = (id: string) => {
-        setQuestions(questions.filter(q => q.id !== id));
-        if (currentQuestion?.id === id) {
-            setCurrentQuestion(null);
+    const deleteLastQuestion = () => {
+        if (questions.length > 0) {
+            const updatedQuestions = questions.slice(0, questions.length - 1);
+            setQuestions(updatedQuestions);
         }
     };
 
@@ -95,7 +95,7 @@ export default function QuizQuestionsEditor({ quizId, questions, setQuestions }:
                         <span>{q.title || 'Untitled Question'} ({q.type})</span>
                         <div>
                             <button onClick={() => setCurrentQuestion(q)} className="btn btn-secondary me-2">Edit</button>
-                            <button onClick={() => deleteQuestion(q.id)} className="btn btn-danger">Delete</button>
+                            <button onClick={deleteLastQuestion} className="btn btn-danger">Delete</button>
                         </div>
                     </li>
                 ))}
