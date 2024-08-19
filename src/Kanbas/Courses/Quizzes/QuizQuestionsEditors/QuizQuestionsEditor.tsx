@@ -19,6 +19,7 @@ export default function QuizQuestionsEditor({ quizId, questions, setQuestions }:
         const fetchQuestions = async () => {
             if (quizId) {
                 const fetchedQuestions = await client.fetchQuizQuestions(quizId);
+                console.log(fetchedQuestions);
                 setQuestions(fetchedQuestions);
             }
         };
