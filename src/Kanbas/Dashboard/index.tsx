@@ -1,9 +1,4 @@
 import {Link} from "react-router-dom";
-import * as client from "../Account/client";
-import {useState, useEffect} from "react";
-import {useNavigate} from "react-router-dom";
-import {useDispatch} from "react-redux";
-import {setCurrentUser} from "../Account/reducer";
 import {useUser} from "../Account/UserContext";
 
 export default function Dashboard({
@@ -25,11 +20,8 @@ export default function Dashboard({
 
     if (loading) return <div>Loading still...</div>;
 
-    // if the user is faculty
+    // is the user faculty?
     const isFaculty = "FACULTY" === user?.role;
-
-    console.log("AVODCADO Dashboard user:", user);
-    console.log("Dashboard user role:", user?.role);
 
     return (
         <div id="wd-dashboard">
@@ -89,40 +81,62 @@ export default function Dashboard({
                                 className="text-decoration-none"
                             >
                                 <div className="card rounded-3 overflow-hidden">
-                                    <img src={`/images/${course.img}`} height="{160}" alt="course"/>
+                                    <img
+                                        src={`/images/${course.img}`}
+                                        height="{160}"
+                                        alt="course"
+                                    />
                                     <div className="card-body">
-                    <span
-                        className="wd-dashboard-course-link"
-                        style={{
-                            textDecoration: "none",
-                            color: "navy",
-                            fontWeight: "bold",
-                        }}
-                    >
-                      {course.name}
-                    </span>
-                                        <p className="wd-dashboard-course-title card-text"
-                                           style={{maxHeight: 53, overflow: "hidden"}}>
+                                        <span
+                                            className="wd-dashboard-course-link"
+                                            style={{
+                                                textDecoration: "none",
+                                                color: "navy",
+                                                fontWeight: "bold",
+                                            }}
+                                        >
+                                            {course.name}
+                                        </span>
+                                        <p
+                                            className="wd-dashboard-course-title card-text"
+                                            style={{
+                                                maxHeight: 53,
+                                                overflow: "hidden",
+                                            }}
+                                        >
                                             {course.description}
                                         </p>
-                                        <Link to={`/Kanbas/Courses/${course._id}/Home`}
-                                              className="btn btn-primary">Go</Link>
+                                        <Link
+                                            to={`/Kanbas/Courses/${course._id}/Home`}
+                                            className="btn btn-primary"
+                                        >
+                                            Go
+                                        </Link>
 
-                                        <button onClick={(event) => {
-                                            event.preventDefault();
-                                            deleteCourse(course._id);
-                                        }} className="btn btn-danger float-end"
-                                                id="wd-delete-course-click">
-                                            Delete
-                                        </button>
-                                        <button id="wd-edit-course-click"
-                                                onClick={(event) => {
-                                                    event.preventDefault();
-                                                    setCourse(course);
-                                                }}
-                                                className="btn btn-warning me-2 float-end">
-                                            Edit
-                                        </button>
+                                        {isFaculty && ( // faculty only can edit and delete
+                                            <>
+                                                <button
+                                                    onClick={(event) => {
+                                                        event.preventDefault();
+                                                        deleteCourse(course._id);
+                                                    }}
+                                                    className="btn btn-danger float-end"
+                                                    id="wd-delete-course-click"
+                                                >
+                                                    Delete
+                                                </button>
+                                                <button
+                                                    id="wd-edit-course-click"
+                                                    onClick={(event) => {
+                                                        event.preventDefault();
+                                                        setCourse(course);
+                                                    }}
+                                                    className="btn btn-warning me-2 float-end"
+                                                >
+                                                    Edit
+                                                </button>
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                             </Link>
