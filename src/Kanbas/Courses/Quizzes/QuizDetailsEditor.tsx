@@ -82,13 +82,17 @@ export default function QuizDetailsEditor() {
           navigate(`/Kanbas/Courses/${cid}/Quizzes`);
         }
       } else if (quizId) {
-        const points = await client.calculateTotalPoints(quiz);
-        await client.updateQuiz({
+        const my_quiz = {
           ...quiz,
           questions,
-          points,
           published: publish,
-        });
+        }
+        const point_total = await client.calculateTotalPoints(my_quiz)
+        await client.updateQuiz({...my_quiz, points: point_total});
+
+
+
+
         navigate(`/Kanbas/Courses/${cid}/Quizzes`);
       }
     } catch (err) {
