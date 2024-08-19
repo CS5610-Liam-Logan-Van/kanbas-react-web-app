@@ -18,7 +18,6 @@ export const findQuizById = async (quizId: any) => {
     return response.data;
   } catch (error) {
     console.error("Error fetching quiz:", error);
-    // Return mock data if the API call fails
     return mockQuizData;
   }
 };
@@ -35,32 +34,22 @@ export const deleteQuiz = async (quizId: any) => {
   return response.data;
 };
 
-// export const updateQuiz = async (quiz: any, p0: { status: string; }) => {
-//   const response = await axiosWithCredentials.put(
-//       `${QUIZZES_API}/${quiz._id}`,
-//       quiz
-//   );
-//   return response.data;
-// };
 export const updateQuiz = async (quiz: any) => {
   const response = await axiosWithCredentials.put(
-    `${QUIZZES_API}/${quiz._id}`,
-    quiz
+      `${QUIZZES_API}/${quiz._id}`,
+      quiz
   );
   return response.data;
 };
 
-
-// Adding this to toggle published/unpublished -Van
 export const togglePublish = async (quizId: string, isPublished: boolean) => {
   const response = await axiosWithCredentials.patch(
-    `${QUIZZES_API}/${quizId}`,
-    { published: !isPublished }
+      `${QUIZZES_API}/${quizId}`,
+      { published: !isPublished }
   );
   return response.data;
 };
 
-// do we have something like this?
 export const fetchQuizQuestions = async (quizId: string) => {
   try {
     const response = await axiosWithCredentials.get(`${QUIZZES_API}/quiz/${quizId}/questions`);
@@ -71,15 +60,21 @@ export const fetchQuizQuestions = async (quizId: string) => {
   }
 };
 
-// calculate total points
-export const calculateTotalPoints = (quiz: any) => { // unused, someone steal it. i saw vans comments and made it
+export const updateQuizQuestions = async (quizId: string, questions: any[]) => {
+  const response = await axiosWithCredentials.put(
+      `${QUIZZES_API}/quiz/${quizId}/questions`,
+      { questions }
+  );
+  return response.data;
+};
+
+export const calculateTotalPoints = (quiz: any) => {
   return quiz.questions.reduce(
       (acc: number, q: any) => acc + q.points,
       0
   );
 };
 
-// Mock quiz data
 const mockQuizData = {
   "_id": "poke001",
   "title": "Pokemon Trainer Basics Quiz",
@@ -128,7 +123,7 @@ const mockQuizData = {
       "type": "Fill in the Blank",
       "points": 15,
       "question": "Pikachu is an ________ type Pokemon.",
-      "correct_answers": ["electric", "Electric", "eleectuc", "elecetric"] // i messed up when testing and added them here
+      "correct_answers": ["electric", "Electric", "eleectuc", "elecetric"]
     }
   ]
 };

@@ -37,7 +37,7 @@ export type Question = FillInBlankQuestion | MultipleChoiceQuestion | TrueFalseQ
 
 // Quiz interface
 export interface Quiz {
-    _id: string;
+    _id?: string;
     title: string;
     description: string;
     quiz_type: string;

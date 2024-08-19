@@ -4,24 +4,15 @@ import * as client from '../client';
 import MultipleChoiceEditor from './MultipleChoiceEditor';
 import TrueFalseEditor from './TFEditor';
 import FillInBlankEditor from './FillInBlankEditor';
-
-interface Question {
-    id: string;
-    type: 'Multiple Choice' | 'True/False' | 'Fill in the Blank';
-    title: string;
-    points: number;
-    question: string;
-    choices?: { id: string; option: string }[];
-    correct_choice?: string | boolean;
-    correct_answers?: string[];
-}
+import { Question, MultipleChoiceQuestion, TrueFalseQuestion, FillInBlankQuestion } from "../QuizQuestionDisplays/types";
 
 interface QuizQuestionsEditorProps {
     quizId: string | undefined;
+    questions: Question[];
+    setQuestions: React.Dispatch<React.SetStateAction<Question[]>>;
 }
 
-export default function QuizQuestionsEditor({ quizId }: QuizQuestionsEditorProps) {
-    const [questions, setQuestions] = useState<Question[]>([]);
+export default function QuizQuestionsEditor({ quizId, questions, setQuestions }: QuizQuestionsEditorProps) {
     const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
 
     useEffect(() => {
@@ -32,19 +23,43 @@ export default function QuizQuestionsEditor({ quizId }: QuizQuestionsEditorProps
             }
         };
         fetchQuestions();
-    }, [quizId]);
+    }, [quizId, setQuestions]);
 
     const addQuestion = (type: Question['type']) => {
-        const newQuestion: Question = {
-            id: Date.now().toString(),
-            type,
-            title: '',
-            points: 1,
-            question: '',
-            choices: type === 'Multiple Choice' ? [] : undefined,
-            correct_choice: type === 'True/False' ? false : undefined,
-            correct_answers: type === 'Fill in the Blank' ? [] : undefined,
-        };
+        let newQuestion: Question;
+        switch (type) {
+            case 'Multiple Choice':
+                newQuestion = {
+                    id: Date.now().toString(),
+                    type,
+                    title: '',
+                    points: 1,
+                    question: '',
+                    choices: [],
+                    correct_choice: ''
+                } as MultipleChoiceQuestion;
+                break;
+            case 'True/False':
+                newQuestion = {
+                    id: Date.now().toString(),
+                    type,
+                    title: '',
+                    points: 1,
+                    question: '',
+                    correct_choice: false
+                } as TrueFalseQuestion;
+                break;
+            case 'Fill in the Blank':
+                newQuestion = {
+                    id: Date.now().toString(),
+                    type,
+                    title: '',
+                    points: 1,
+                    question: '',
+                    correct_answers: []
+                } as FillInBlankQuestion;
+                break;
+        }
         setQuestions([...questions, newQuestion]);
         setCurrentQuestion(newQuestion);
     };
@@ -88,21 +103,21 @@ export default function QuizQuestionsEditor({ quizId }: QuizQuestionsEditorProps
                 <div className="mt-4">
                     {currentQuestion.type === 'Multiple Choice' && (
                         <MultipleChoiceEditor
-                            question={currentQuestion as any}
+                            question={currentQuestion as MultipleChoiceQuestion}
                             onSave={updateQuestion}
                             onCancel={handleCancel}
                         />
                     )}
                     {currentQuestion.type === 'True/False' && (
                         <TrueFalseEditor
-                            question={currentQuestion as any}
+                            question={currentQuestion as TrueFalseQuestion}
                             onSave={updateQuestion}
                             onCancel={handleCancel}
                         />
                     )}
                     {currentQuestion.type === 'Fill in the Blank' && (
                         <FillInBlankEditor
-                            question={currentQuestion as any}
+                            question={currentQuestion as FillInBlankQuestion}
                             onSave={updateQuestion}
                             onCancel={handleCancel}
                         />
