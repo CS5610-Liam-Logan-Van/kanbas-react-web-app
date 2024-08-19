@@ -14,6 +14,11 @@ export default function TOC() {
                   Node Repo
               </a>
           </li>
+          <li className="nav-item">
+              <a id="wd-k" href="#/Kanbas" className="nav-link">
+                  Kanbas
+              </a>
+          </li>
 
       </ul>
   );
