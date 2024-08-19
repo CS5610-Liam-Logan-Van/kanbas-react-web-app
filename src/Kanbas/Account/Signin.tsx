@@ -3,19 +3,22 @@ import {Link, useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {setCurrentUser} from "./reducer";
 import * as client from "./client";
+import {useUser} from "./UserContext";
 
 export default function Signin() {
     const dispatch = useDispatch();
     const [error, setError] = useState("");
     const [credentials, setCredentials] = useState<any>({});
     const navigate = useNavigate();
+    const {refetchUser} = useUser();
+
     const signin = async () => {
         try {
-            const currentUser = await client.signin(credentials);
+            const currentUser = await client.signin(credentials, refetchUser);
             dispatch(setCurrentUser(currentUser));
             navigate("/Kanbas/Account/Profile");
         } catch (err: any) {
-            setError(err.response.data.message);
+            setError(err.response?.data?.message || "Sign-in failed");
         }
 
     };

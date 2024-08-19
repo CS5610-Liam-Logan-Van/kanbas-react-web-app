@@ -3,6 +3,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {setCurrentUser} from "./reducer";
 import * as client from "./client";
+import {useUser} from "./UserContext";
 
 export default function Signup() {
     const dispatch = useDispatch();
@@ -13,13 +14,15 @@ export default function Signup() {
         role: "STUDENT"
     });
     const navigate = useNavigate();
+    const { refetchUser } = useUser()
+
     const signup = async () => {
         try {
-            const currentUser = await client.signup(user);
+            const currentUser = await client.signup(user, refetchUser);
             dispatch(setCurrentUser(currentUser));
             navigate("/Kanbas/Account/Profile");
         } catch (err: any) {
-            setError(err.response.data.message);
+            setError(err.response.data.message || "Sign-up failed");
         }
     };
 
