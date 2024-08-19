@@ -12,12 +12,19 @@ import ProtectedRoute from "./ProtectedRoute";
 
 export default function Kanbas() {
     const [courses, setCourses] = useState<any[]>([]);
+    const [user, setUser] = useState<any>(null);
     const fetchCourses = async () => {
         const courses = await client.fetchAllCourses();
         setCourses(courses);
     };
+    const fetchUserProfile = async () => {
+        const profile = await client.profile();
+        setUser(profile);
+    }
+
     useEffect(() => {
         fetchCourses();
+        fetchUserProfile()
     }, []);
 
     const [course, setCourse] = useState<any>({
@@ -63,7 +70,8 @@ export default function Kanbas() {
                             setCourse={setCourse}
                             addNewCourse={addNewCourse}
                             deleteCourse={deleteCourse}
-                            updateCourse={updateCourse}/></ProtectedRoute>}/>
+                            updateCourse={updateCourse}
+                            /></ProtectedRoute>}/>
                         <Route path="Courses/:cid/*" element={<ProtectedRoute><Courses courses={courses}/></ProtectedRoute>}/>
                     </Routes>
                 </div>

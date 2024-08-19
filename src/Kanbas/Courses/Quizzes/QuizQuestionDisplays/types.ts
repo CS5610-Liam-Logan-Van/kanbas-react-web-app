@@ -37,11 +37,11 @@ export type Question = FillInBlankQuestion | MultipleChoiceQuestion | TrueFalseQ
 
 // Quiz interface
 export interface Quiz {
+    points: number;
     _id?: string;
     title: string;
     description: string;
     quiz_type: string;
-    total_points: number;
     assignment_group: string;
     shuffle_answers: boolean;
     time_limit: number;
@@ -55,6 +55,7 @@ export interface Quiz {
     due_date: string;
     available_date: string;
     until_date: string;
+    published: boolean;
     questions: Question[];
 }
 

@@ -72,10 +72,16 @@ export const updateQuizQuestions = async (quizId: string, questions: any[]) => {
 };
 
 export const calculateTotalPoints = (quiz: any) => {
-    return quiz.questions.reduce(
-        (acc: number, q: any) => acc + q.points,
+    console.log("Starting calculation of total points...");
+    const totalPoints = quiz.questions.reduce(
+        (acc: number, q: any) => {
+            console.log(`Adding points for question ${q.id}: ${q.points}`);
+            return acc + q.points;
+        },
         0
     );
+    console.log(`Total points calculated: ${totalPoints}`);
+    return totalPoints;
 };
 
 const mockQuizData = {

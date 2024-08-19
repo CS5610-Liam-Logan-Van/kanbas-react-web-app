@@ -7,7 +7,7 @@ interface Quiz {
     title: string;
     description: string;
     quiz_type: string;
-    total_points: number;
+    points: number;
     assignment_group: string;
     shuffle_answers: boolean;
     time_limit: number;
@@ -52,7 +52,7 @@ export default function QuizDetails() {
             <p>{quiz.description}</p>
             <ul>
                 <li>Quiz Type: {quiz.quiz_type}</li>
-                <li>Points: {quiz.total_points}</li>
+                <li>Points: {quiz.points}</li>
                 <li>Assignment Group: {quiz.assignment_group}</li>
                 <li>Shuffle Answers: {quiz.shuffle_answers ? 'Yes' : 'No'}</li>
                 <li>Time Limit: {quiz.time_limit} minutes</li>

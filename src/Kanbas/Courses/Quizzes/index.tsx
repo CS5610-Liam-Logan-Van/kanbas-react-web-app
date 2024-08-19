@@ -28,7 +28,6 @@ export default function Quizzes() {
     shuffle_answers: false,
     time_limit: 20,
     multiple_attempts: false,
-    total_points: 100,
     show_correct_answers: "After Submission",
     access_code: "",
     one_question_at_a_time: true,
