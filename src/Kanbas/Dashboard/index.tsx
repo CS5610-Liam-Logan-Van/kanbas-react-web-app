@@ -15,25 +15,12 @@ export default function Dashboard(
         updateCourse: () => void;
     }
 ) {
-    const dispatch = useDispatch();
-    const [profile, setProfile] = useState<any>({});
-    const navigate = useNavigate();
-    const fetchProfile = async () => {
-        try {
-            const account = await client.profile();
-            setProfile(account);
-        } catch (err: any) {
-            navigate("/Kanbas/Account/Signin");
-        }
-    };
-    useEffect(() => {
-        fetchProfile();
-    }, []);
+
     return (
         <div id="wd-dashboard">
             <h1 id="wd-dashboard-title">Dashboard</h1>
             <hr/>
-            {profile.role === "FACULTY" ? (
+            {true ? (
                 <div>
                     <h5>New Course
                         <button className="btn btn-primary float-end"
