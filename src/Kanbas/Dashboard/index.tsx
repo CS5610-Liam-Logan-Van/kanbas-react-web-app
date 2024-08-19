@@ -1,5 +1,6 @@
 import {Link} from "react-router-dom";
 import {useUser} from "../Account/UserContext";
+import React from "react";
 
 export default function Dashboard({
                                       courses,
@@ -62,11 +63,29 @@ export default function Dashboard({
                     />
                 </div>
             ) : (
-                <p>if u r seeing this we did it (student).</p>
+                <div>
+
+                    <div className="mb-3">
+                        <label htmlFor="quiz_type" className="form-label">
+                            <h3>Enroll:</h3>
+                        </label>
+                        <select
+                            className="form-select"
+                            id="available_courses"
+                            name="available_courses"
+                        >
+                            {courses.map((course: any) => (
+                                <option value={course._id}>{course.name}</option>
+                            ))}
+                        </select>
+                    <button className="btn btn-primary mt-2">Enroll in Selected Course</button>
+                    </div>
+                </div>
+
             )}
 
             <hr/>
-            <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2>
+            <h2 id="wd-dashboard-published">Courses ({courses.length})</h2>
             <hr/>
             <div id="wd-dashboard-courses" className="row">
                 <div className="row row-cols-1 row-cols-md-5 g-4">
