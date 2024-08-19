@@ -42,6 +42,7 @@ export default function Quizzes() {
     try {
       const newQuiz = await client.createQuiz(quiz);
       dispatch(addQuiz(newQuiz)); // updates redux store
+      navigate(`/Kanbas/Courses/${cid}/Quizzes/QuizDetailsEditor/${newQuiz._id}`);
     } catch (error) {
       console.error("Error creating quiz:", error);
     }
