@@ -7,12 +7,15 @@ import { useDispatch } from "react-redux";
 import { addQuiz } from "./reducer";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import { useUser } from "../../Account/UserContext";
 
 export default function Quizzes() {
   const { cid } = useParams();
   const course = new Date();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { user } = useUser();
+  const isFaculty = "FACULTY" === user?.role;
   const quiz = {
     _id: "",
     course_id: cid as String,
@@ -42,7 +45,9 @@ export default function Quizzes() {
     try {
       const newQuiz = await client.createQuiz(quiz);
       dispatch(addQuiz(newQuiz)); // updates redux store
-      navigate(`/Kanbas/Courses/${cid}/Quizzes/QuizDetailsEditor/${newQuiz._id}`);
+      navigate(
+        `/Kanbas/Courses/${cid}/Quizzes/QuizDetailsEditor/${newQuiz._id}`
+      );
     } catch (error) {
       console.error("Error creating quiz:", error);
     }
@@ -68,17 +73,21 @@ export default function Quizzes() {
           <button className="float-end btn btn-lg btn-secondary me-1">
             <FaEllipsisV />
           </button>
-          <button
-            id="wd-add-quiz"
-            className="float-end btn btn-lg btn-danger me-1"
-            onClick={handleCreateQuiz}
-          >
-            <FaPlus
-              className="position-relative me-2"
-              style={{ bottom: "1px" }}
-            />
-            Quiz
-          </button>
+          {isFaculty ? (
+            <button
+              id="wd-add-quiz"
+              className="float-end btn btn-lg btn-danger me-1"
+              onClick={handleCreateQuiz}
+            >
+              <FaPlus
+                className="position-relative me-2"
+                style={{ bottom: "1px" }}
+              />
+              Quiz
+            </button>
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
 
