@@ -14,13 +14,12 @@ import { deleteQuiz, findAllQuizzes } from "./client";
 import { removeQuiz, setQuizzes } from "./reducer";
 import { FaPencil } from "react-icons/fa6";
 import { useUser } from '../../Account/UserContext';
-import { divide } from "../../../Labs/Lab3/Math";
 
 export default function QuizList() {
   const { cid } = useParams();
   const { quizzes } = useSelector((state: any) => state.quizzesReducer);
   const dispatch = useDispatch();
-  const { user, loading } = useUser();
+  const { user } = useUser();
   const isFaculty = "FACULTY" === user?.role;
 
   useEffect(() => {
