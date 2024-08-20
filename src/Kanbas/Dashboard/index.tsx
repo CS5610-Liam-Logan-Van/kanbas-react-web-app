@@ -28,8 +28,6 @@ export default function Dashboard({
 
     const handleEnroll = async () => {
         if (selectedCourseId) {
-            console.log("Enroll button clicked, selectedCourseId:", selectedCourseId); // Debug log
-
             try {
                 const updatedUser = {
                     ...user,
@@ -37,8 +35,6 @@ export default function Dashboard({
                         ? [...user.enrolledCourses, selectedCourseId]
                         : [selectedCourseId],
                 };
-
-                console.log("Updated user object to send:", updatedUser); // Debug log
 
                 await client.updateUser(updatedUser, refetchUser);
                 alert("Enrolled successfully!");
@@ -48,6 +44,14 @@ export default function Dashboard({
         }
     };
 
+    const handleCreateCourse = async () => {
+        try {
+            addNewCourse(); // Create the course
+            refetchUser(); // Fetch the updated user data
+        } catch (error) {
+            console.error("Failed to create a new course:", error);
+        }
+    };
 
     return (
         <div id="wd-dashboard">
@@ -60,7 +64,7 @@ export default function Dashboard({
                         <button
                             className="btn btn-primary float-end"
                             id="wd-add-new-course-click"
-                            onClick={addNewCourse}
+                            onClick={handleCreateCourse} // Updated to handle course creation
                         >
                             Add
                         </button>

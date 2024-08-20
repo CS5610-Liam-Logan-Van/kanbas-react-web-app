@@ -1,17 +1,17 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import * as client from "../Account/client";
 
 interface User {
     _id: string;
     username: string;
     role: "FACULTY" | "STUDENT";
-    enrolledCourses: any;
+    enrolledCourses: string[];
 }
 
 interface UserContextType {
     user: User | null;
     loading: boolean;
-    refetchUser: () => void; // refetch user for state updates
+    refetchUser: () => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -28,26 +28,25 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
-    const fetchProfile = async () => {
+    const fetchProfile = useCallback(async () => {
         setLoading(true);
         try {
             const profileData = await client.profile();
             setUser(profileData);
         } catch (error) {
             console.error("Error fetching user profile:", error);
-            setUser(null); // Reset user on error (like signed out)
         } finally {
             setLoading(false);
         }
-    };
-
-    useEffect(() => {
-        fetchProfile(); // user profile is fetched when the provider mounts
     }, []);
 
-    const refetchUser = () => {
+    const refetchUser = useCallback(() => {
         fetchProfile();
-    };
+    }, [fetchProfile]);
+
+    useEffect(() => {
+        fetchProfile();
+    }, [fetchProfile]);
 
     return (
         <UserContext.Provider value={{ user, loading, refetchUser }}>
@@ -55,4 +54,3 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         </UserContext.Provider>
     );
 };
-
