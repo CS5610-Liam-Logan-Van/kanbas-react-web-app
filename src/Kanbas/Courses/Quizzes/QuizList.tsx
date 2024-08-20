@@ -13,11 +13,15 @@ import * as client from "../Quizzes/client";
 import { deleteQuiz, findAllQuizzes } from "./client";
 import { removeQuiz, setQuizzes } from "./reducer";
 import { FaPencil } from "react-icons/fa6";
+import { useUser } from '../../Account/UserContext';
+import { divide } from "../../../Labs/Lab3/Math";
 
 export default function QuizList() {
   const { cid } = useParams();
   const { quizzes } = useSelector((state: any) => state.quizzesReducer);
   const dispatch = useDispatch();
+  const { user, loading } = useUser();
+  const isFaculty = "FACULTY" === user?.role;
 
   useEffect(() => {
     const fetchQuizzes = async () => {
@@ -76,68 +80,74 @@ const renderQuizzes = (quiz: any) => (
         </p>
       </div>
       <div className="ms-auto">
-        <div className="wd-right-icons d-inline-flex align-items-center">
-          <button
-            id="wd-quiz-toggle-btn"
-            type="button"
-            className="btn btn-link p-0"
-            onClick={() => handleTogglePublish(quiz._id, quiz.published)}
-          >
-            {quiz.published ? (
-              <MdCheckBox className="text-success me-2 fs-4" />
-            ) : (
-              <CiNoWaitingSign className="text-danger me-2 fs-4" />
-            )}
-          </button>
-          <div id="wd-quiz-toggle">
+        {isFaculty ? (
+          <div className="wd-right-icons d-inline-flex align-items-center">
             <button
               id="wd-quiz-toggle-btn"
               type="button"
-              data-bs-toggle="dropdown"
-              className="btn"
+              className="btn btn-link p-0"
+              onClick={() => handleTogglePublish(quiz._id, quiz.published)}
             >
-              <IoEllipsisVertical className="fs-4" />
+              {quiz.published ? (
+                <MdCheckBox className="text-success me-2 fs-4" />
+              ) : (
+                <CiNoWaitingSign className="text-danger me-2 fs-4" />
+              )}
             </button>
-            <ul className="dropdown-menu">
-              <li>
-                <Link
-                  to={`QuizDetailsEditor/${quiz._id}`}
-                  className="dropdown-item d-flex align-items-center"
-                >
-                  <FaPencil className="text-primary me-2 mb-1" />
-                  Edit
-                </Link>
-              </li>
-              <li>
-                <button
-                  className="dropdown-item d-flex align-items-center"
-                  onClick={() => handleDelete(quiz._id)}
-                >
-                  <FaTrash className="text-danger me-2 mb-1" />
-                  Delete
-                </button>
-              </li>
-              <li>
-                <button
-                  className="dropdown-item d-flex align-items-center"
-                  onClick={() => handleTogglePublish(quiz._id, quiz.published)}
-                >
-                  {quiz.published ? (
-                    <>
-                      <CiNoWaitingSign className="text-danger me-2" />
-                      Unpublish
-                    </>
-                  ) : (
-                    <>
-                      <MdCheckBox className="text-success me-2" />
-                      Publish
-                    </>
-                  )}
-                </button>
-              </li>
-            </ul>
+            <div id="wd-quiz-toggle">
+              <button
+                id="wd-quiz-toggle-btn"
+                type="button"
+                data-bs-toggle="dropdown"
+                className="btn"
+              >
+                <IoEllipsisVertical className="fs-4" />
+              </button>
+              <ul className="dropdown-menu">
+                <li>
+                  <Link
+                    to={`QuizDetailsEditor/${quiz._id}`}
+                    className="dropdown-item d-flex align-items-center"
+                  >
+                    <FaPencil className="text-primary me-2 mb-1" />
+                    Edit
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    className="dropdown-item d-flex align-items-center"
+                    onClick={() => handleDelete(quiz._id)}
+                  >
+                    <FaTrash className="text-danger me-2 mb-1" />
+                    Delete
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className="dropdown-item d-flex align-items-center"
+                    onClick={() =>
+                      handleTogglePublish(quiz._id, quiz.published)
+                    }
+                  >
+                    {quiz.published ? (
+                      <>
+                        <CiNoWaitingSign className="text-danger me-2" />
+                        Unpublish
+                      </>
+                    ) : (
+                      <>
+                        <MdCheckBox className="text-success me-2" />
+                        Publish
+                      </>
+                    )}
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div></div>
+        )}
       </div>
     </div>
   </li>
