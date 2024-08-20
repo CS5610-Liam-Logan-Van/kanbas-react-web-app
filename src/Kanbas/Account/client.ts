@@ -30,7 +30,18 @@ export const signout = async (refetchUser?: () => void) => {
 };
 
 export const updateUser = async (user: any, refetchUser: () => void) => {
-    const response = await axios.put(`${USERS_API}/${user._id}`, user);
+    const response = await axiosWithCredentials.put(
+      `${USERS_API}/${user._id}`,
+      user
+    );
     refetchUser();
     return response.data;
+};
+
+export const editUser = async (user: any) => {
+  const response = await axiosWithCredentials.put(
+    `${USERS_API}/${user._id}`,
+    user
+  );
+  return response.data;
 };
