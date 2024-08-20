@@ -5,6 +5,7 @@ interface User {
     _id: string;
     username: string;
     role: "FACULTY" | "STUDENT";
+    enrolledCourses: any;
 }
 
 interface UserContextType {
