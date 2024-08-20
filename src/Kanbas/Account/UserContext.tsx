@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import React, {createContext, useContext, useState, useEffect, useCallback} from "react";
 import * as client from "../Account/client";
 
 interface User {
@@ -24,7 +24,7 @@ export const useUser = () => {
     return context;
 };
 
-export const UserProvider = ({ children }: { children: React.ReactNode }) => {
+export const UserProvider = ({children}: { children: React.ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -32,7 +32,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         setLoading(true);
         try {
             const profileData = await client.profile();
-            setUser(profileData);
+            setUser({...profileData}); // Ensure a new object reference
         } catch (error) {
             console.error("Error fetching user profile:", error);
         } finally {
@@ -45,11 +45,11 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }, [fetchProfile]);
 
     useEffect(() => {
-        fetchProfile();
+        fetchProfile(); // Initial profile fetch
     }, [fetchProfile]);
 
     return (
-        <UserContext.Provider value={{ user, loading, refetchUser }}>
+        <UserContext.Provider value={{user, loading, refetchUser}}>
             {children}
         </UserContext.Provider>
     );
